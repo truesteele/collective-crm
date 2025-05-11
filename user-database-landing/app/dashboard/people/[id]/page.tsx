@@ -8,13 +8,16 @@ import { getPersonById } from "@/lib/supabase"
 import { formatDate, getContactTypeColor } from "@/lib/utils"
 
 export default async function PersonDetailPage({ params }: { params: { id: string } }) {
+  // Properly await the params object before accessing properties
+  const { id } = await params
+  
   // Special case: if the ID is "new", redirect to the new person page
-  if (params.id === "new") {
+  if (id === "new") {
     redirect("/dashboard/people/new")
   }
 
   try {
-    const person = await getPersonById(params.id)
+    const person = await getPersonById(id)
     const contactTypeColor = getContactTypeColor(person.primary_contact_type)
 
     return (

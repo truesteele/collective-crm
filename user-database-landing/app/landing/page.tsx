@@ -22,10 +22,10 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-4">
             <Button variant="ghost" asChild className="text-brand-600 hover:text-brand-700 hover:bg-brand-50">
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/login">Sign In</Link>
             </Button>
             <Button asChild className="bg-brand-500 hover:bg-brand-600">
-              <Link href="/dashboard/people/new">Get Started</Link>
+              <Link href="/login">Get Started</Link>
             </Button>
           </div>
         </div>
@@ -44,14 +44,14 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button size="lg" asChild className="bg-brand-500 hover:bg-brand-600">
-                  <Link href="/dashboard">
-                    Access Dashboard
+                  <Link href="/login">
+                    Sign In
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
                 <Button variant="outline" size="lg" asChild className="border-brand-200 text-brand-700 hover:bg-brand-50">
-                  <Link href="/dashboard/people">
-                    Browse Contacts
+                  <Link href="/login">
+                    Access CRM
                     <ChevronRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -262,14 +262,14 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button size="lg" variant="secondary" asChild className="bg-white text-brand-700 hover:bg-gray-100">
-              <Link href="/dashboard">
-                Access Dashboard
+              <Link href="/login">
+                Sign In
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild className="border-white text-white hover:bg-brand-600">
-              <Link href="/dashboard/people/new">
-                Add Your First Contact
+              <Link href="/login">
+                Access CRM
                 <UserPlus className="ml-2 h-4 w-4" />
               </Link>
             </Button>

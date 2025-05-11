@@ -99,7 +99,7 @@ export default async function DashboardPage() {
             <Briefcase className="h-4 w-4 text-brand-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{contactTypeCounts["Board Member"] || 0}</div>
+            <div className="text-2xl font-bold">{contactTypeCounts["Board"] || 0}</div>
             <p className="text-xs text-muted-foreground">Board members in your network</p>
           </CardContent>
         </Card>
@@ -227,10 +227,9 @@ export default async function DashboardPage() {
               </Link>
             </Button>
             <Button
-              className="justify-start"
-              variant="outline"
+              variant="outline" 
               asChild
-              className="border-brand-200 text-brand-700 hover:bg-brand-50"
+              className="justify-start border-brand-200 text-brand-700 hover:bg-brand-50"
             >
               <Link href="/dashboard/people">
                 <Users className="mr-2 h-4 w-4" />
@@ -238,10 +237,9 @@ export default async function DashboardPage() {
               </Link>
             </Button>
             <Button
-              className="justify-start"
               variant="outline"
               asChild
-              className="border-brand-200 text-brand-700 hover:bg-brand-50"
+              className="justify-start border-brand-200 text-brand-700 hover:bg-brand-50"
             >
               <Link href="/dashboard/organizations">
                 <Building2 className="mr-2 h-4 w-4" />
@@ -249,10 +247,9 @@ export default async function DashboardPage() {
               </Link>
             </Button>
             <Button
-              className="justify-start"
               variant="outline"
               asChild
-              className="border-brand-200 text-brand-700 hover:bg-brand-50"
+              className="justify-start border-brand-200 text-brand-700 hover:bg-brand-50"
             >
               <Link href="/dashboard/analytics">
                 <BarChart3 className="mr-2 h-4 w-4" />
@@ -260,10 +257,9 @@ export default async function DashboardPage() {
               </Link>
             </Button>
             <Button
-              className="justify-start"
               variant="outline"
               asChild
-              className="border-brand-200 text-brand-700 hover:bg-brand-50"
+              className="justify-start border-brand-200 text-brand-700 hover:bg-brand-50"
             >
               <Link href="/dashboard/export">
                 <svg

@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js"
+import { createBrowserClient } from "@supabase/ssr"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ""
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
@@ -90,8 +90,8 @@ export const contactTypeGroups = {
   Other: ["Influencer", "Media Contact", "Vendor"],
 }
 
-// Create Supabase client
-export const supabase = createClient(supabaseUrl, supabaseKey)
+// Create Supabase client using createBrowserClient
+export const supabase = createBrowserClient(supabaseUrl, supabaseKey)
 
 // Mock data for development
 // const mockPeople: Person[] = [ ... ]; // Removed mock data array
@@ -222,19 +222,26 @@ export async function deletePerson(id: string) {
 
 // Wrapper for getContactTypeCounts function to use mock data if needed -> Refactored to throw errors
 export async function getContactTypeCounts() {
+  // Get contact types from Supabase
   const { data, error } = await supabase.from("people").select("primary_contact_type")
-
+  
+  // Handle errors
   if (error) {
     console.error("Error fetching contact type counts:", error)
-    throw error // Throw error instead of using mock data
+    throw error
   }
-
+  
+  // Create counts object with proper typing
   const counts: Record<string, number> = {}
-  (data || []).forEach((person) => { // Handle potential null data
-    const type = person.primary_contact_type || "Uncategorized"
-    counts[type] = (counts[type] || 0) + 1
-  })
-
+  
+  // Count occurrences of each contact type
+  if (data) {
+    data.forEach(person => {
+      const type = person.primary_contact_type || "Uncategorized"
+      counts[type] = (counts[type] || 0) + 1
+    })
+  }
+  
   return counts
 }
 

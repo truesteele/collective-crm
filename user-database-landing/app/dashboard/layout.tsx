@@ -5,11 +5,13 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
-import { Users, Home, Building2, UserPlus, BarChart3, Settings, Search, UserCircle2, ChevronDown } from "lucide-react"
+import { Users, Home, Building2, UserPlus, BarChart3, Settings, Search, UserCircle2, ChevronDown, LogOut } from "lucide-react"
 import { contactTypeGroups } from "@/lib/supabase"
 import { Suspense } from "react"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { supabase } from "@/lib/supabase"
+import { toast } from "@/components/ui/use-toast"
 
 export default function DashboardLayout({
   children,
@@ -80,6 +82,22 @@ export default function DashboardLayout({
               <UserPlus className="h-4 w-4" />
               <span className="hidden md:inline">Add Contact</span>
             </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+              onClick={async () => {
+                await supabase.auth.signOut()
+                toast({
+                  title: "Signed out",
+                  description: "You have been successfully signed out."
+                })
+                window.location.href = "/login"
+              }}
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden md:inline">Sign Out</span>
+            </Button>
           </div>
         </div>
       </header>

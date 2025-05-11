@@ -15,7 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Pencil, Trash2, ExternalLink } from "lucide-react"
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Pencil, Trash2, ExternalLink, ChevronRight, ChevronsLeft, ChevronsRight, ChevronLeft } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -44,6 +44,13 @@ import { Badge } from "@/components/ui/badge"
 import { toast } from "@/components/ui/use-toast"
 import { type Person, deletePerson, contactTypeGroups } from "@/lib/supabase"
 import { getContactTypeColor, isProspectiveType } from "@/lib/utils"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export const columns: ColumnDef<Person>[] = [
   {
@@ -56,11 +63,13 @@ export const columns: ColumnDef<Person>[] = [
       />
     ),
     cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
+      <div onClick={(e) => e.stopPropagation()}>
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      </div>
     ),
     enableSorting: false,
     enableHiding: false,
@@ -141,6 +150,8 @@ export const columns: ColumnDef<Person>[] = [
   {
     id: "actions",
     cell: ({ row }) => <ActionCell person={row.original} />,
+    enableSorting: false,
+    enableHiding: false,
   },
 ]
 
@@ -149,54 +160,56 @@ function ActionCell({ person }: { person: Person }) {
   const [open, setOpen] = useState(false)
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem asChild>
-          <Link href={`/dashboard/people/${person.id}`} className="text-brand-700">
-            <ExternalLink className="mr-2 h-4 w-4" />
-            View Details
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href={`/dashboard/people/${person.id}/edit`} className="text-brand-700">
-            <Pencil className="mr-2 h-4 w-4" />
-            Edit
-          </Link>
-        </DropdownMenuItem>
-        {person.linkedin_profile && (
+    <div className="actions-cell" onClick={(e) => e.stopPropagation()}>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem asChild>
-            <a href={person.linkedin_profile} target="_blank" rel="noopener noreferrer" className="text-brand-700">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="mr-2 h-4 w-4"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                <rect width="4" height="12" x="2" y="9"></rect>
-                <circle cx="4" cy="4" r="2"></circle>
-              </svg>
-              LinkedIn Profile
-            </a>
+            <Link href={`/dashboard/people/${person.id}`} className="text-brand-700">
+              <ExternalLink className="mr-2 h-4 w-4" />
+              View Details
+            </Link>
           </DropdownMenuItem>
-        )}
-        <DropdownMenuSeparator />
-        <DeletePersonMenuItem personId={person.id} personName={person.full_name} />
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <DropdownMenuItem asChild>
+            <Link href={`/dashboard/people/${person.id}/edit`} className="text-brand-700">
+              <Pencil className="mr-2 h-4 w-4" />
+              Edit
+            </Link>
+          </DropdownMenuItem>
+          {person.linkedin_profile && (
+            <DropdownMenuItem asChild>
+              <a href={person.linkedin_profile} target="_blank" rel="noopener noreferrer" className="text-brand-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="mr-2 h-4 w-4"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect width="4" height="12" x="2" y="9"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+                LinkedIn Profile
+              </a>
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuSeparator />
+          <DeletePersonMenuItem personId={person.id} personName={person.full_name} />
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }
 
@@ -263,6 +276,7 @@ function DeletePersonMenuItem({ personId, personName }: { personId: string; pers
 }
 
 export function PeopleDataTable({ data }: { data: Person[] }) {
+  const router = useRouter()
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -282,6 +296,11 @@ export function PeopleDataTable({ data }: { data: Person[] }) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    initialState: {
+      pagination: {
+        pageSize: 20,
+      },
+    },
     state: {
       sorting,
       columnFilters,
@@ -302,6 +321,11 @@ export function PeopleDataTable({ data }: { data: Person[] }) {
     table.getColumn("primary_contact_type")?.setFilterValue(null)
     setSelectedType(null)
     setTypeFilterOpen(false)
+  }
+
+  // Function to handle row click and navigate to person details
+  const handleRowClick = (personId: string) => {
+    router.push(`/dashboard/people/${personId}`)
   }
 
   return (
@@ -411,9 +435,37 @@ export function PeopleDataTable({ data }: { data: Person[] }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className="hover:bg-brand-50">
+                <TableRow 
+                  key={row.id} 
+                  data-state={row.getIsSelected() && "selected"} 
+                  className="hover:bg-brand-100/30 cursor-pointer transition-colors active:bg-brand-100/70 group relative"
+                  onClick={(e) => {
+                    // Avoid navigating when clicking on checkboxes or action buttons
+                    if (
+                      e.target instanceof HTMLElement && 
+                      (e.target.closest('[role="checkbox"]') || 
+                       e.target.closest('.actions-cell') || 
+                       e.target.closest('button'))
+                    ) {
+                      return
+                    }
+                    handleRowClick(row.original.id)
+                  }}
+                >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    <TableCell 
+                      key={cell.id} 
+                      className={`${cell.column.id === 'actions' ? 'actions-cell' : ''} ${
+                        cell.column.id !== 'select' && cell.column.id !== 'actions' ? 'group-hover:text-brand-700' : ''
+                      } ${cell.column.id === 'full_name' ? 'relative' : ''}`}
+                    >
+                      {cell.column.id === 'full_name' && (
+                        <div className="absolute right-1 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-brand-500">
+                          <ChevronRight className="h-5 w-5" />
+                        </div>
+                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))
@@ -428,11 +480,44 @@ export function PeopleDataTable({ data }: { data: Person[] }) {
         </Table>
       </div>
       <div className="flex items-center justify-between space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-          selected.
+        <div className="flex items-center gap-2">
+          <div className="flex-1 text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
+            selected.
+          </div>
+          
+          <div className="flex items-center gap-1 ml-4">
+            <span className="text-sm text-muted-foreground">Rows per page</span>
+            <Select
+              value={`${table.getState().pagination.pageSize}`}
+              onValueChange={(value) => {
+                table.setPageSize(Number(value))
+              }}
+            >
+              <SelectTrigger className="h-8 w-[70px]">
+                <SelectValue placeholder={table.getState().pagination.pageSize} />
+              </SelectTrigger>
+              <SelectContent side="top">
+                {[10, 20, 30, 50, 100].map((pageSize) => (
+                  <SelectItem key={pageSize} value={`${pageSize}`}>
+                    {pageSize}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
+        
         <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+            className="border-brand-200 text-brand-700 px-2"
+          >
+            <ChevronsLeft className="h-4 w-4" />
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -440,8 +525,12 @@ export function PeopleDataTable({ data }: { data: Person[] }) {
             disabled={!table.getCanPreviousPage()}
             className="border-brand-200 text-brand-700"
           >
+            <ChevronLeft className="h-4 w-4 mr-1" />
             Previous
           </Button>
+          <span className="text-sm text-muted-foreground">
+            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          </span>
           <Button
             variant="outline"
             size="sm"
@@ -450,6 +539,16 @@ export function PeopleDataTable({ data }: { data: Person[] }) {
             className="border-brand-200 text-brand-700"
           >
             Next
+            <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+            className="border-brand-200 text-brand-700 px-2"
+          >
+            <ChevronsRight className="h-4 w-4" />
           </Button>
         </div>
       </div>

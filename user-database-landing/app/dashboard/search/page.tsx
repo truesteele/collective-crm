@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Search, UserPlus } from "lucide-react"
+import { UserPlus, Search } from "lucide-react"
 import { searchPeople, type Person } from "@/lib/supabase"
 import { getContactTypeColor, truncateText } from "@/lib/utils"
 import { toast } from "@/components/ui/use-toast"
@@ -16,6 +16,21 @@ export default function SearchPage() {
   const [results, setResults] = useState<Person[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
+  
+  // Use debounce to avoid excessive API calls
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      setHasSearched(false);
+      return;
+    }
+    
+    const debounceTimer = setTimeout(() => {
+      handleSearch();
+    }, 300); // 300ms debounce
+    
+    return () => clearTimeout(debounceTimer);
+  }, [query]);
 
   const handleSearch = async () => {
     if (!query.trim()) return
@@ -41,10 +56,10 @@ export default function SearchPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Search</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-brand-700">People Directory</h2>
           <p className="text-muted-foreground">Find contacts in your network</p>
         </div>
-        <Button asChild>
+        <Button asChild className="bg-brand-500 hover:bg-brand-600">
           <Link href="/dashboard/people/new">
             <UserPlus className="mr-2 h-4 w-4" />
             Add Contact
@@ -52,40 +67,51 @@ export default function SearchPage() {
         </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Search Contacts</CardTitle>
+      <Card className="border-brand-100">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-brand-700 flex items-center">
+            <Search className="h-5 w-5 mr-2 text-brand-500" />
+            Find People
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-2">
+          <div className="relative">
             <Input
               placeholder="Search by name, email, title, location, or notes..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="flex-1"
+              className="pl-9"
             />
-            <Button onClick={handleSearch} disabled={isSearching}>
-              <Search className="mr-2 h-4 w-4" />
-              {isSearching ? "Searching..." : "Search"}
-            </Button>
+            <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
+            {isSearching && (
+              <div className="absolute right-3 top-3 text-sm text-muted-foreground animate-pulse">
+                Searching...
+              </div>
+            )}
           </div>
 
-          {hasSearched && (
+          {(hasSearched || query.trim()) && (
             <div className="mt-6">
-              <h3 className="text-lg font-medium mb-4">
-                {results.length} {results.length === 1 ? "result" : "results"} found
-              </h3>
+              {results.length > 0 && (
+                <div className="text-sm text-muted-foreground mb-4">
+                  Found {results.length} {results.length === 1 ? "person" : "people"}
+                </div>
+              )}
+              
               {results.length > 0 ? (
                 <div className="space-y-4">
                   {results.map((person) => (
-                    <div key={person.id} className="border rounded-md p-4">
+                    <Link 
+                      href={`/dashboard/people/${person.id}`} 
+                      key={person.id} 
+                      className="block border border-brand-100 rounded-md p-4 hover:bg-brand-50 transition-colors"
+                    >
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                         <div>
                           <div className="flex items-center gap-2">
-                            <Link href={`/dashboard/people/${person.id}`} className="font-medium hover:underline">
+                            <span className="font-medium text-brand-700 hover:underline">
                               {person.full_name}
-                            </Link>
+                            </span>
                             {person.primary_contact_type && (
                               <Badge
                                 variant="outline"
@@ -100,26 +126,22 @@ export default function SearchPage() {
                             {person.location_name || ""}
                           </p>
                         </div>
-                        <Button size="sm" variant="outline" asChild>
-                          <Link href={`/dashboard/people/${person.id}`}>View Profile</Link>
-                        </Button>
                       </div>
                       {person.summary && (
                         <p className="mt-2 text-sm text-muted-foreground">{truncateText(person.summary, 150)}</p>
                       )}
-                      {person.notes && (
-                        <div className="mt-2">
-                          <p className="text-xs font-medium">Notes:</p>
-                          <p className="text-sm text-muted-foreground">{truncateText(person.notes, 100)}</p>
-                        </div>
+                      {person.notes && !person.summary && (
+                        <p className="mt-2 text-sm text-muted-foreground">{truncateText(person.notes, 100)}</p>
                       )}
-                    </div>
+                    </Link>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8">
-                  <p className="text-muted-foreground">No results found. Try a different search term.</p>
-                </div>
+                query.trim() && !isSearching && (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">No results found. Try a different search term.</p>
+                  </div>
+                )
               )}
             </div>
           )}

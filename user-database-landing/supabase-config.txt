@@ -1,0 +1,10 @@
+# Supabase Configuration Template
+# Copy this to .env.local and replace with your actual values
+
+NEXT_PUBLIC_SUPABASE_URL=https://bbibzoifpslvqhccvqol.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+
+# For local development, you should also update your Site URL in Supabase:
+# 1. Go to Authentication > URL Configuration in Supabase Dashboard
+# 2. Change "Site URL" to http://localhost:3000 when testing locally
+# 3. Change it back to your production URL when deploying 

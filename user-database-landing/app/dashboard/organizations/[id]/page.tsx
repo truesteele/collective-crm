@@ -7,14 +7,17 @@ import { getOrganizationById, getPeopleByOrganization } from "@/lib/supabase"
 import { formatDate } from "@/lib/utils"
 
 export default async function OrganizationDetailPage({ params }: { params: { id: string } }) {
+  // Properly await the params object before accessing properties
+  const { id } = await params
+  
   // Special case: if the ID is "new", redirect to the new organization page
-  if (params.id === "new") {
+  if (id === "new") {
     redirect("/dashboard/organizations/new")
   }
 
   try {
-    const organization = await getOrganizationById(params.id)
-    const associatedPeople = await getPeopleByOrganization(params.id)
+    const organization = await getOrganizationById(id)
+    const associatedPeople = await getPeopleByOrganization(id)
 
     return (
       <div className="space-y-6">
