@@ -1,0 +1,15 @@
+{
+  "name": "supabase-to-pipedrive",
+  "version": "1.0.0",
+  "description": "Export contacts from Supabase to Pipedrive",
+  "main": "supabase_to_pipedrive.js",
+  "scripts": {
+    "start": "node supabase_to_pipedrive.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
+  }
+} 
