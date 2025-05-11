@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
-import { Users, Home, Building2, UserPlus, BarChart3, Settings, Search, UserCircle2, ChevronDown, LogOut } from "lucide-react"
+import { Users, Home, Building2, UserPlus, BarChart3, Settings, Search, UserCircle2, ChevronDown, LogOut, DollarSign } from "lucide-react"
 import { contactTypeGroups } from "@/lib/supabase"
 import { Suspense } from "react"
 import { Button } from "@/components/ui/button"
@@ -292,6 +292,20 @@ export default function DashboardLayout({
             >
               <Building2 className="h-5 w-5" />
               <span>Organizations</span>
+            </Link>
+
+            <div className="pt-2 pb-1">
+              <p className="px-3 text-xs font-medium text-muted-foreground">Fundraising</p>
+            </div>
+
+            <Link
+              href="/dashboard/fundraising"
+              className={`flex items-center gap-2 rounded-lg px-3 py-2 transition-all hover:bg-brand-100 hover:text-brand-700 ${
+                pathname.startsWith("/dashboard/fundraising") ? "bg-brand-100 text-brand-700" : "text-foreground"
+              }`}
+            >
+              <DollarSign className="h-5 w-5" />
+              <span>Fundraising Pipelines</span>
             </Link>
 
             <div className="pt-2 pb-1">

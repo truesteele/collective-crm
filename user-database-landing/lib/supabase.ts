@@ -46,6 +46,51 @@ export type Organization = {
   last_pipedrive_sync: string | null
 }
 
+// Fundraising models
+export type FundraisingPipeline = {
+  id: string
+  name: string
+  created_at: string
+  updated_at: string
+}
+
+export type PipelineStage = {
+  id: string
+  pipeline_id: string
+  name: string
+  order: number
+  created_at: string
+  updated_at: string
+}
+
+export type FundraisingDeal = {
+  id: string
+  title: string
+  organization_id: string
+  pipeline_id: string
+  stage_id: string
+  amount: number | null
+  contact_person_id: string | null
+  notes: string | null
+  created_at: string
+  updated_at: string
+}
+
+// Default pipeline stages based on Pipedrive screenshot
+export const defaultPipelineStages = [
+  "Qualified Prospect",
+  "Outreach Sent",
+  "Contact Made",
+  "Meeting Scheduled", 
+  "Long-Term Cultivation",
+  "Holding for Grant Cycle",
+  "Grant In Progress (LOI)",
+  "Grant In Progress (Full)",
+  "Grant Submitted (Online)",
+  "Grant Submitted (In Person)",
+  "Declined"
+];
+
 // Updated contact types based on the provided list
 export const contactTypes = [
   "Participant",
@@ -276,4 +321,163 @@ export async function searchPeople(query: string) {
   }
 
   return data as Person[]
+}
+
+// Fundraising Pipeline Functions
+export async function getFundraisingPipelines() {
+  const { data, error } = await supabase
+    .from("fundraising_pipelines")
+    .select("*")
+    .order("name")
+
+  if (error) {
+    console.error("Error fetching fundraising pipelines:", error)
+    throw error
+  }
+
+  return data as FundraisingPipeline[]
+}
+
+export async function getPipelineById(id: string) {
+  const { data, error } = await supabase
+    .from("fundraising_pipelines")
+    .select("*")
+    .eq("id", id)
+    .single()
+
+  if (error) {
+    console.error("Error fetching pipeline:", error)
+    throw error
+  }
+
+  return data as FundraisingPipeline
+}
+
+export async function getPipelineStages(pipelineId: string) {
+  const { data, error } = await supabase
+    .from("pipeline_stages")
+    .select("*")
+    .eq("pipeline_id", pipelineId)
+    .order("order")
+
+  if (error) {
+    console.error("Error fetching pipeline stages:", error)
+    throw error
+  }
+
+  return data as PipelineStage[]
+}
+
+export async function createPipeline(pipeline: Omit<FundraisingPipeline, "id" | "created_at" | "updated_at">) {
+  const { data, error } = await supabase
+    .from("fundraising_pipelines")
+    .insert([pipeline])
+    .select()
+
+  if (error) {
+    console.error("Error creating pipeline:", error)
+    throw error
+  }
+
+  return data[0] as FundraisingPipeline
+}
+
+export async function createPipelineStage(stage: Omit<PipelineStage, "id" | "created_at" | "updated_at">) {
+  const { data, error } = await supabase
+    .from("pipeline_stages")
+    .insert([stage])
+    .select()
+
+  if (error) {
+    console.error("Error creating pipeline stage:", error)
+    throw error
+  }
+
+  return data[0] as PipelineStage
+}
+
+export async function updatePipelineStage(id: string, stage: Partial<Omit<PipelineStage, "id" | "created_at" | "updated_at">>) {
+  const { data, error } = await supabase
+    .from("pipeline_stages")
+    .update(stage)
+    .eq("id", id)
+    .select()
+
+  if (error) {
+    console.error("Error updating pipeline stage:", error)
+    throw error
+  }
+
+  return data[0] as PipelineStage
+}
+
+export async function deletePipelineStage(id: string) {
+  const { error } = await supabase
+    .from("pipeline_stages")
+    .delete()
+    .eq("id", id)
+
+  if (error) {
+    console.error("Error deleting pipeline stage:", error)
+    throw error
+  }
+
+  return true
+}
+
+export async function getDealsByPipeline(pipelineId: string) {
+  const { data, error } = await supabase
+    .from("fundraising_deals")
+    .select("*")
+    .eq("pipeline_id", pipelineId)
+
+  if (error) {
+    console.error("Error fetching deals:", error)
+    throw error
+  }
+
+  return data as FundraisingDeal[]
+}
+
+export async function createDeal(deal: Omit<FundraisingDeal, "id" | "created_at" | "updated_at">) {
+  const { data, error } = await supabase
+    .from("fundraising_deals")
+    .insert([deal])
+    .select()
+
+  if (error) {
+    console.error("Error creating deal:", error)
+    throw error
+  }
+
+  return data[0] as FundraisingDeal
+}
+
+export async function updateDeal(id: string, deal: Partial<Omit<FundraisingDeal, "id" | "created_at" | "updated_at">>) {
+  const { data, error } = await supabase
+    .from("fundraising_deals")
+    .update(deal)
+    .eq("id", id)
+    .select()
+
+  if (error) {
+    console.error("Error updating deal:", error)
+    throw error
+  }
+
+  return data[0] as FundraisingDeal
+}
+
+export async function deleteDeal(id: string) {
+  const { error } = await supabase
+    .from("fundraising_deals")
+    .delete()
+    .eq("id", id)
+
+  if (error) {
+    console.error("Error deleting deal:", error)
+    throw error
+  }
+
+  return true
 }

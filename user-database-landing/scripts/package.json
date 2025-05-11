@@ -1,0 +1,17 @@
+{
+  "name": "pipedrive-migration-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for importing Pipedrive data to fundraising pipeline",
+  "main": "import-pipedrive-deals.ts",
+  "scripts": {
+    "create-pipeline": "npx supabase db remote execute -f create-initial-pipeline.sql",
+    "import-deals": "ts-node import-pipedrive-deals.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "axios": "^1.9.0",
+    "dotenv": "^16.5.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}

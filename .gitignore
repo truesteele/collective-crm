@@ -61,4 +61,14 @@ jspm_packages/
 # Temporary files
 *.tmp
 *.temp
-sync_log.txt 
+sync_log.txt
+
+# Sensitive credential files
+*-users.sh
+*-user-*.sh
+*credentials*.json
+*secrets*.json
+*keys*.json
+
+# Root level duplicate scripts
+/bidirectional_sync.js 
