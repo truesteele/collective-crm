@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 200 15% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 200 15% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 15% 15%;
+
+    --primary: 196 40% 29%; /* Brand teal/blue */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 196 40% 29%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 196 30% 90%;
+    --accent-foreground: 196 40% 29%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 196 40% 29%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 200 15% 15%;
+    --foreground: 210 40% 98%;
+
+    --card: 200 15% 17%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 200 15% 17%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 196 40% 29%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 200 15% 25%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 200 15% 25%;
+    --muted-foreground: 215 16% 65%;
+
+    --accent: 196 40% 20%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 200 15% 25%;
+    --input: 200 15% 25%;
+    --ring: 196 40% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom styles for the Outdoorithm CRM */
+.brand-gradient {
+  background: linear-gradient(135deg, #2d5a68 0%, #3f5a44 100%);
+}
+
+.brand-border {
+  border-color: #2d5a68;
+}
+
+.contact-type-badge {
+  @apply text-xs font-medium px-2 py-0.5 rounded-full;
+}
