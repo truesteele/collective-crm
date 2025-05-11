@@ -27,11 +27,23 @@ export type Person = {
 export type Organization = {
   id: string
   name: string
-  website: string | null
+  website_url: string | null
   industry: string | null
-  description: string | null
+  pipedrive_org_id: number | null
+  normalized_domain: string | null
+  funding_program_url: string | null
+  organization_type: string | null
+  linkedin_url: string | null
+  ein_number: string | null
+  primary_address: string | null
+  employee_count: number | null
+  locality: string | null
+  incorporation_type: string | null
+  size_range: string | null
+  founded: number | null
   created_at: string
   updated_at: string
+  last_pipedrive_sync: string | null
 }
 
 // Updated contact types based on the provided list
