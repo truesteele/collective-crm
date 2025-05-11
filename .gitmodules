@@ -1,0 +1,3 @@
+[submodule "user-database-landing"]
+	path = user-database-landing
+	url = https://github.com/truesteele/collective-crm-landing.git
